@@ -1,0 +1,16 @@
+# IDEs
+.idea/
+.vscode/
+
+# Project files
+dist/
+node_modules/
+test/
+.dockerignore
+.env
+.env.example
+.eslintrc.js
+.gitignore
+.prettierrc
+Dockerfile
+nest-cli.json
