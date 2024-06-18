@@ -1,14 +1,24 @@
 resource "aws_instance" "instance" {
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  security_groups = [aws_security_group.security_group.id]
-  subnet_id       = aws_subnet.subnet.id
-  key_name        = aws_key_pair.key_pair.key_name
-  user_data       = file("${path.module}/assets/entrypoint.sh")
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  vpc_security_group_ids = [aws_security_group.security_group.id]
+  subnet_id              = aws_subnet.subnet.id
+  key_name               = aws_key_pair.key_pair.key_name
+  user_data              = file("${path.module}/assets/entrypoint.sh")
 
   provisioner "file" {
     source      = "${path.module}/assets/docker-compose.yaml"
     destination = "/home/ec2-user/docker-compose.yaml"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/assets/nginx"
+    destination = "/home/ec2-user/nginx"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/assets/certbot"
+    destination = "/home/ec2-user/certbot"
   }
 
   connection {

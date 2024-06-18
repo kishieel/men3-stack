@@ -1,6 +1,7 @@
 import { ApiOptions } from 'nestjs-swagger-api-spec';
 import { UserResource, UsersCollection } from '@app/users/users.resources';
 import { ExceptionResource } from '@app/utils/exception.resources';
+import { CreateUserRequest } from '@app/users/users.requests';
 
 export const UsersSwagger = {
     Controller: {
@@ -49,6 +50,10 @@ export const UsersSwagger = {
                 summary: 'Create user',
                 description: 'Creates a new user',
             }),
+        // apiBodyOptions: (t) =>
+        //     t({
+        //         type: CreateUserRequest,
+        //     }),
         apiOkResponseOptions: (t) =>
             t({
                 description: 'User',

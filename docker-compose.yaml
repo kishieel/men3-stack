@@ -18,6 +18,22 @@ services:
     volumes: [ "./backend:/app:delegated" ]
     networks: [ "default" ]
 
+  nextjs:
+    build:
+      context: "./frontend"
+      dockerfile: "Dockerfile"
+      target: "development"
+      args:
+        UID: "${UID:-1000}"
+        GID: "${GID:-1000}"
+    restart: "unless-stopped"
+    environment:
+      NEXT_PRIVATE_API_URL: "http://nestjs:3000"
+    ports:
+      - "${FORWARD_NEXT_PORT:-3001}:3000"
+    volumes: [ "./frontend:/app:delegated" ]
+    networks: [ "default" ]
+
   mysql:
     image: "mysql:8.3"
     restart: "unless-stopped"

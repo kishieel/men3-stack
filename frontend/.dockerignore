@@ -1,0 +1,10 @@
+# IDEs
+.idea/
+.vscode/
+
+# Project files
+.next/
+.gitignore
+.eslintrc.json
+node_modules/
+next-env.d.ts

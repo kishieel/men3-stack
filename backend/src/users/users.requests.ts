@@ -1,12 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsStrongPassword } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserRequest {
-    @ApiProperty({ example: 'john.doe@example.com' })
     @IsString()
+    @ApiProperty()
     username: string;
 
-    @ApiProperty({ example: 'password' })
     @IsString()
     @IsStrongPassword({
         minLength: 8,
@@ -15,5 +14,6 @@ export class CreateUserRequest {
         minNumbers: 1,
         minSymbols: 1,
     })
+    @ApiProperty()
     password: string;
 }
