@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  nestjs:
+    build:
+      context: "./backend"
+      dockerfile: "Dockerfile"
+      target: "development"
+      args:
+        UID: "${UID:-1000}"
+        GID: "${GID:-1000}"
+    restart: "unless-stopped"
+    environment:
+      DATABASE_URL: "mysql://root:root@mysql:3306/app"
+    ports:
+      - "${FORWARD_NEST_PORT:-3000}:3000"
+    depends_on: [ "mysql" ]
+    volumes: [ "./backend:/app:delegated" ]
+    networks: [ "default" ]
+
+  mysql:
+    image: "mysql:8.3"
+    restart: "unless-stopped"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "app"
+    ports:
+      - "${FORWARD_MYSQL_PORT:-3306}:3306"
+    volumes: [ "mysql-data:/var/lib/mysql" ]
+    networks: [ "default" ]
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local

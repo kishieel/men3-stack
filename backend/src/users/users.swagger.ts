@@ -1,6 +1,6 @@
 import { ApiOptions } from 'nestjs-swagger-api-spec';
 import { UserResource, UsersCollection } from '@app/users/users.resources';
-import { ExceptionResource } from '@app/utils/common.resources';
+import { ExceptionResource } from '@app/utils/exception.resources';
 
 export const UsersSwagger = {
     Controller: {
