@@ -1,6 +1,21 @@
 version: '3.9'
 
 services:
+  nginx:
+    image: "nginx:1.21"
+    restart: "unless-stopped"
+    ports:
+      - "${FORWARD_NGINX_HTTP_PORT:-80}:80"
+      - "${FORWARD_NGINX_HTTPS_PORT:-443}:443"
+    depends_on:
+      - "nestjs"
+      - "nextjs"
+    volumes:
+      - "./nginx/conf.d:/etc/nginx/conf.d:ro"
+      - "./nginx/ssl:/etc/nginx/ssl:ro"
+    networks:
+      - "default"
+
   nestjs:
     build:
       context: "./backend"
@@ -13,10 +28,13 @@ services:
     environment:
       DATABASE_URL: "mysql://root:root@mysql:3306/app"
     ports:
-      - "${FORWARD_NEST_PORT:-3000}:3000"
-    depends_on: [ "mysql" ]
-    volumes: [ "./backend:/app:delegated" ]
-    networks: [ "default" ]
+      - "${FORWARD_NEST_PORT:-3201}:3000"
+    depends_on:
+      - "mysql"
+    volumes:
+      - "./backend:/app:delegated"
+    networks:
+      - "default"
 
   nextjs:
     build:
@@ -30,9 +48,13 @@ services:
     environment:
       NEXT_PRIVATE_API_URL: "http://nestjs:3000"
     ports:
-      - "${FORWARD_NEXT_PORT:-3001}:3000"
-    volumes: [ "./frontend:/app:delegated" ]
-    networks: [ "default" ]
+      - "${FORWARD_NEXT_PORT:-3202}:3000"
+    depends_on:
+      - "nestjs"
+    volumes:
+      - "./frontend:/app:delegated"
+    networks:
+      - "default"
 
   mysql:
     image: "mysql:8.3"
@@ -42,8 +64,10 @@ services:
       MYSQL_DATABASE: "app"
     ports:
       - "${FORWARD_MYSQL_PORT:-3306}:3306"
-    volumes: [ "mysql-data:/var/lib/mysql" ]
-    networks: [ "default" ]
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+    networks:
+      - "default"
 
 networks:
   default:
