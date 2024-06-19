@@ -22,3 +22,26 @@ deployment/ - set of terraform tools to deploy application into aws with two fla
 - Linter and prettier.
 - Test coverage (backend: unit, integration; frontend: unit, e2e)
 - CI/CD.
+
+## CI/CD
+
+### Pull Request
+
+- Linting
+- Unit tests
+- Build images
+- Push images to registry
+- Start containers
+- Integration tests
+
+### Merge to Master
+
+- Build images
+- Push images to registry
+- Deploy to development environment
+
+### New Tag
+
+- Build images
+- Push images to registry
+- Deploy to production environment
