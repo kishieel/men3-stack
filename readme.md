@@ -45,3 +45,12 @@ deployment/ - set of terraform tools to deploy application into aws with two fla
 - Build images
 - Push images to registry
 - Deploy to production environment
+
+## Drafts
+
+```makefile
+connect:
+	@eval "$(ssh-agent -s)"
+	@ssh-add <(terraform output -json | jq -r '.private_key.value')
+	@ssh -A ec2-user@"$$(terraform output -json | jq -r '.public_ip.value')"
+```

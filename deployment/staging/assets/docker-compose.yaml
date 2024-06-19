@@ -10,7 +10,8 @@ services:
     volumes:
       - "./nginx/conf.d:/etc/nginx/conf.d:ro"
       - "./certbot/www:/var/www/certbot:ro"
-    networks: [ "default" ]
+    networks:
+      - "default"
 
   certbot:
     image: "certbot/certbot:latest"
@@ -24,10 +25,10 @@ services:
     restart: "unless-stopped"
     environment:
       DATABASE_URL: "${NEST_DATABASE_URL:-mysql://root:root@mysql:3306/app}"
-    ports:
-      - "${FORWARD_NEST_PORT:-3000}:3000"
-    depends_on: [ "mysql" ]
-    networks: [ "default" ]
+    depends_on:
+      - "mysql"
+    networks:
+      - "default"
 
   # nextjs:
   #   image: "ghcr.io/kishieel/men3-stack-frontend:${NEXT_VERSION:-latest}"
@@ -35,8 +36,6 @@ services:
   #   environment:
   #     NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL}"
   #     NEXT_PRIVATE_API_URL: "nestjs:3000"
-  #   ports:
-  #     - "${FORWARD_NEXT_PORT:-80}:3000"
   #   networks: [ "default" ]
 
   mysql:
@@ -45,10 +44,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "app"
-    ports:
-      - "${FORWARD_MYSQL_PORT:-3306}:3306"
-    volumes: [ "mysql-data:/var/lib/mysql" ]
-    networks: [ "default" ]
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+    networks:
+      - "default"
 
 networks:
   default:

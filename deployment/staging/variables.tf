@@ -27,12 +27,12 @@ variable "allowed_ssh_cidr_blocks" {
   description = "List of CIDR blocks to allow SSH access from."
 }
 
-variable "docker_username" {
+variable "ghcr_username" {
   type        = string
   description = "Docker username to use for GitHub Container Registry."
 }
 
-variable "docker_password" {
+variable "ghcr_password" {
   type        = string
   description = "Docker password to use for GitHub Container Registry."
   sensitive   = true
