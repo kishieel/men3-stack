@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@app/prisma/prisma.service';
-import { UserResource, UsersCollection } from "@app/users/users.resources";
+import { UserResource, UsersCollection } from '@app/users/users.resources';
 import { throwIf } from '@app/utils/throw-if.function';
 import { CreateUserRequest } from '@app/users/users.requests';
 

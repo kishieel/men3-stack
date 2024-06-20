@@ -17,6 +17,7 @@ function help() {
     echo -e "  ${GREEN}deps${NC}       Install the dependencies"
     echo -e "  ${GREEN}migrate${NC}    Run the migrations"
     echo -e "  ${GREEN}seed${NC}       Seed the database"
+    echo -e "  ${GREEN}testing${NC}    Prepare the testing environment"
 }
 
 function setup() {
@@ -26,6 +27,7 @@ function setup() {
     deps
     migrate
     seed
+    testing
 }
 
 function env() {
@@ -61,6 +63,10 @@ function seed() {
     docker compose exec nestjs yarn prisma:seed
 }
 
+function testing() {
+  docker compose exec mysql bash -c 'mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS testing;"'
+}
+
 function main() {
     case $1 in
         help) help "$@";;
@@ -73,6 +79,7 @@ function main() {
         deps) deps "$@";;
         migrate) migrate "$@";;
         seed) seed "$@";;
+        testing) testing "$@";;
         *) echo "Unknown command: $1"; exit 1;;
     esac
 }
