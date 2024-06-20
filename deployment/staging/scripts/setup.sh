@@ -16,3 +16,7 @@ usermod -a -G docker ec2-user
 # Start Docker
 systemctl enable docker
 systemctl start docker
+
+# Setup aliases
+alias d="docker"
+alias c="docker compose"

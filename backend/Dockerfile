@@ -18,20 +18,30 @@ RUN chown node:node -R /app
 EXPOSE 3000
 USER node:node
 
-
-FROM system AS development
-
-ENV NODE_ENV="development"
+FROM system AS development-deps
 
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node yarn.lock yarn.lock
 RUN yarn --frozen-lockfile
 
+
+FROM system AS development
+
+ENV NODE_ENV="development"
+
+COPY --from=development-deps --chown=node:node /app/node_modules /app/node_modules
 COPY --chown=node:node . .
+
 RUN if [ -d prisma ]; then yarn prisma generate; fi
 RUN yarn build
 
 CMD ["yarn", "start:dev"]
+
+FROM system AS production-deps
+
+COPY --chown=node:node package.json package.json
+COPY --chown=node:node yarn.lock yarn.lock
+RUN yarn --production --frozen-lockfile
 
 
 FROM system as production
@@ -40,8 +50,10 @@ ENV NODE_ENV="production"
 
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node yarn.lock yarn.lock
-RUN yarn --production --frozen-lockfile
 
+COPY --from=production-deps --chown=node:node /app/node_modules /app/node_modules
+COPY --from=development --chown=node:node /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=development --chown=node:node /app/prisma /app/prisma
 COPY --from=development --chown=node:node /app/dist /app/dist
 
 CMD ["yarn", "start:prod"]

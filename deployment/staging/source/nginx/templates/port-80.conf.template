@@ -1,12 +1,14 @@
 server {
-    listen 80;
-    listen [::]:80;
-
     server_name _;
     server_tokens off;
 
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
+    listen 80;
+    listen [::]:80;
+
+    http2 on;
+
+    location /.well-known/health {
+        return 200 "OK";
     }
 
     location / {

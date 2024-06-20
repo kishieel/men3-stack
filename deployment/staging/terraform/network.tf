@@ -6,7 +6,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_subnet" "subnet" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = var.public_az
+  availability_zone       = var.aws_availability_zone
   map_public_ip_on_launch = true
 }
 
@@ -32,15 +32,22 @@ resource "aws_security_group" "security_group" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
-    from_port   = 8000
-    to_port     = 8000
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -49,7 +56,7 @@ resource "aws_security_group" "security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = var.allowed_ssh_cidr_blocks
+    cidr_blocks = var.aws_ssh_cidr_blocks
   }
 
   egress {

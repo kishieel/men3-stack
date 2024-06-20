@@ -21,6 +21,7 @@
     "test:watch": "jest --watch",
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate dev --skip-seed",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
     "prisma:seed": "prisma db seed",
     "prisma:reset": "prisma migrate reset --force --skip-seed"
