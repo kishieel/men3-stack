@@ -8,7 +8,7 @@
     "lint": "next lint",
     "start": "next start",
     "start:dev": "next dev",
-    "start:prod": "node server.js",
+    "start:prod": "HOSTNAME=0.0.0.0 node server.js",
     "openapi": "openapi-typescript ./openapi.yaml --output ./src/api/schema.d.ts"
   },
   "dependencies": {

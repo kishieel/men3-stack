@@ -29,7 +29,7 @@ FROM system AS development
 
 ENV NODE_ENV="development"
 
-COPY --from=development-deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=development-deps --chown=node:node /app/node_modules /app/node_modules
 COPY --chown=node:node . .
 
 RUN if [ -d prisma ]; then yarn prisma generate; fi
@@ -51,8 +51,9 @@ ENV NODE_ENV="production"
 COPY --chown=node:node package.json package.json
 COPY --chown=node:node yarn.lock yarn.lock
 
-COPY --from=production-deps --chown=node:node /app/node_modules ./node_modules
-COPY --from=development --chown=node:node /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=production-deps --chown=node:node /app/node_modules /app/node_modules
+COPY --from=development --chown=node:node /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=development --chown=node:node /app/prisma /app/prisma
 COPY --from=development --chown=node:node /app/dist /app/dist
 
 CMD ["yarn", "start:prod"]

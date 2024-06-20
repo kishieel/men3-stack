@@ -1,8 +1,13 @@
 server {
-    server_name _;
+    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
 
-    listen 80 http2;
-    listen [::]:80 http2;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    http2 on;
+
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem;
 
     location /api {
         proxy_pass http://nestjs:3000;

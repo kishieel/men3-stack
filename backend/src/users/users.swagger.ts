@@ -50,10 +50,10 @@ export const UsersSwagger = {
                 summary: 'Create user',
                 description: 'Creates a new user',
             }),
-        // apiBodyOptions: (t) =>
-        //     t({
-        //         type: CreateUserRequest,
-        //     }),
+        apiBodyOptions: (t) =>
+            t({
+                type: CreateUserRequest,
+            }),
         apiOkResponseOptions: (t) =>
             t({
                 description: 'User',
