@@ -25,15 +25,5 @@ variable "instance_type" {
 variable "allowed_ssh_cidr_blocks" {
   type        = list(string)
   description = "List of CIDR blocks to allow SSH access from."
-}
-
-variable "ghcr_username" {
-  type        = string
-  description = "Docker username to use for GitHub Container Registry."
-}
-
-variable "ghcr_password" {
-  type        = string
-  description = "Docker password to use for GitHub Container Registry."
-  sensitive   = true
+  default     = []
 }

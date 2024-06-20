@@ -13,12 +13,12 @@ services:
     networks:
       - "default"
 
-  certbot:
-    image: "certbot/certbot:latest"
-    restart: "unless-stopped"
-    volumes:
-      - "./certbot/conf:/etc/letsencrypt:rw"
-      - "./certbot/www:/var/www/certbot:rw"
+  #  certbot:
+  #    image: "certbot/certbot:latest"
+  #    restart: "unless-stopped"
+  #    volumes:
+  #      - "./certbot/conf:/etc/letsencrypt:rw"
+  #      - "./certbot/www:/var/www/certbot:rw"
 
   nestjs:
     image: "ghcr.io/kishieel/men3-stack-backend:${NEST_VERSION:-latest}"
@@ -30,13 +30,14 @@ services:
     networks:
       - "default"
 
-  # nextjs:
-  #   image: "ghcr.io/kishieel/men3-stack-frontend:${NEXT_VERSION:-latest}"
-  #   restart: "unless-stopped"
-  #   environment:
-  #     NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL}"
-  #     NEXT_PRIVATE_API_URL: "nestjs:3000"
-  #   networks: [ "default" ]
+  nextjs:
+    image: "ghcr.io/kishieel/men3-stack-frontend:${NEXT_VERSION:-latest}"
+    restart: "unless-stopped"
+    environment:
+      NEXT_PUBLIC_API_URL: "???"
+      NEXT_PRIVATE_API_URL: "???"
+    networks:
+      - "default"
 
   mysql:
     image: "mysql:8.3"

@@ -4,7 +4,7 @@ resource "aws_instance" "instance" {
   vpc_security_group_ids = [aws_security_group.security_group.id]
   subnet_id              = aws_subnet.subnet.id
   key_name               = aws_key_pair.key_pair.key_name
-  user_data              = file("${path.module}/scripts/setup.sh")
+  user_data              = file("${path.module}/../scripts/setup.sh")
 
   lifecycle {
     create_before_destroy = true
