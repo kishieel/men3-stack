@@ -1,12 +1,12 @@
-import { UsersController } from '@app/users/users.controller';
-import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { ConfigModule } from '@app/config/config.module';
 import { PrismaModule } from '@app/prisma/prisma.module';
 import { PrismaService } from '@app/prisma/prisma.service';
+import { UsersController } from '@app/users/users.controller';
 import { UsersModule } from '@app/users/users.module';
-import { ConfigModule } from '@app/config/config.module';
-import * as request from 'supertest';
 import { CreateUserRequest } from '@app/users/users.requests';
+import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import * as request from 'supertest';
 
 describe(UsersController.name, () => {
     let app: INestApplication;

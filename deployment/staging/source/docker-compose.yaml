@@ -4,7 +4,6 @@ services:
     restart: "unless-stopped"
     environment:
       DOMAIN_NAME: "${DOMAIN_NAME}"
-      CERTBOT_EMAIL: "${CERTBOT_EMAIL}"
     ports:
       - "${FORWARD_NGINX_PORT:-80}:80"
       - "${FORWARD_NGINX_PORT_SSL:-443}:443"
@@ -21,6 +20,11 @@ services:
     volumes:
       - "./nginx/templates:/etc/nginx/templates:ro"
       - "./letsencrypt:/etc/letsencrypt:ro"
+    depends_on:
+      nestjs:
+        condition: service_healthy
+      nextjs:
+        condition: service_healthy
     networks:
       - "default"
 
@@ -40,7 +44,8 @@ services:
         awslogs-region: "${AWS_REGION:-eu-central-1}"
         awslogs-group: "/aws/ec2/backend"
     depends_on:
-      - "mysql"
+      mysql:
+        condition: service_healthy
     networks:
       - "default"
 

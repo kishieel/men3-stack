@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { execSync } from 'child_process';
 import * as process from 'process';
 

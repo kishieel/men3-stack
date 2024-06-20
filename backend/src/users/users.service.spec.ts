@@ -1,7 +1,7 @@
-import { UsersService } from '@app/users/users.service';
-import { Test } from '@nestjs/testing';
 import { PrismaService } from '@app/prisma/prisma.service';
+import { UsersService } from '@app/users/users.service';
 import { NotFoundException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 
 describe(UsersService.name, () => {
     let service: UsersService;

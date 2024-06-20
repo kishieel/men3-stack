@@ -1,0 +1,81 @@
+name: Deploy backend to staging
+
+on:
+#  push:
+#    paths:
+#      - 'backend/**'
+#    branches:
+#      - master
+  pull_request: # @fixme: temporary for testing, remove after testing
+    branches:
+      - master
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: kishieel/men3-stack-backend
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: type=sha
+      - name: Build and push image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          targets: production
+          context: backend
+          file: backend/Dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+          provenance: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Restart services
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          NEST_VERSION: ${{ needs.build.outputs.version }}
+          DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: NEST_VERSION,AWS_REGION
+          script: |
+            docker compose up -d --build nestjs
+            docker compose exec nestjs yarn prisma:deploy

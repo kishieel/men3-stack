@@ -1,0 +1,18 @@
+name: Deploy backend to production
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mock build
+        run: echo "Mock build"

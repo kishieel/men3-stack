@@ -7,21 +7,25 @@ function help() {
     echo -e "Usage: $0 <command>"
     echo -e
     echo -e "Commands:"
-    echo -e "  ${GREEN}help${NC}       Show this help message"
-    echo -e "  ${GREEN}setup${NC}      Setup the staging environment"
-    echo -e "  ${GREEN}env${NC}        Create the .env file"
-    echo -e "  ${GREEN}provision${NC}  Provision the staging environment"
-    echo -e "  ${GREEN}destroy${NC}    Destroy the staging environment"
-    echo -e "  ${GREEN}connect${NC}    Connect to the virtual machine"
-    echo -e "  ${GREEN}certbot${NC}    Run Certbot on the virtual machine to obtain an SSL certificate"
-    echo -e "  ${GREEN}deploy${NC}     Deploy the application to the staging environment"
+    echo -e "  ${GREEN}help${NC}           Show this help message"
+    echo -e "  ${GREEN}setup${NC}          Setup the staging environment"
+    echo -e "  ${GREEN}env${NC}            Create the .env file"
+    echo -e "  ${GREEN}provision${NC}      Provision the staging environment"
+    echo -e "  ${GREEN}destroy${NC}        Destroy the staging environment"
+    echo -e "  ${GREEN}connect${NC}        Connect to the virtual machine"
+    echo -e "  ${GREEN}certbot${NC}        Run Certbot on the virtual machine to obtain an SSL certificate"
+    echo -e "  ${GREEN}docker_login${NC}   Login to GitHub Container Registry on the virtual machine"
+    echo -e "  ${GREEN}copy_files${NC}     Copy files to the virtual machine"
+    echo -e "  ${GREEN}start_services${NC} Start the services on the virtual machine"
 }
 
 function setup() {
   env
   provision
   certbot
-  deploy
+  copy_files
+  docker_login
+  start_services
 }
 
 function env() {
@@ -100,18 +104,33 @@ function certbot() {
     "docker run -it --rm -p 80:80 --name certbot -v ./letsencrypt:/etc/letsencrypt certbot/certbot:latest certonly --standalone --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${DOMAIN_NAME} -d www.${DOMAIN_NAME};"
 }
 
-function deploy() {
+function docker_login() {
+  source .env
+  ssh_agent
+
+  local public_ip; public_ip=$(get_ec2_public_ip)
+
+  ssh -A -tt ec2-user@"$public_ip" "docker login ghcr.io -u $GHCR_USERNAME --password-stdin <<< $GHCR_PASSWORD;"
+}
+
+function copy_files() {
   source .env
   ssh_agent
 
   local public_ip; public_ip=$(get_ec2_public_ip)
 
   scp -A -r ./source/* ec2-user@"$public_ip":/home/ec2-user
+}
+
+function start_services() {
+  source .env
+  ssh_agent
+
+  local public_ip; public_ip=$(get_ec2_public_ip)
+
   ssh -A -tt ec2-user@"$public_ip" \
-    "docker login ghcr.io -u $GHCR_USERNAME --password-stdin <<< $GHCR_PASSWORD;" \
     "export NEXT_VERSION=$NEXT_VERSION;" \
     "export NEST_VERSION=$NEST_VERSION;" \
-    "export CERTBOT_EMAIL=$CERTBOT_EMAIL;" \
     "export DOMAIN_NAME=$DOMAIN_NAME;" \
     "export AWS_REGION=$AWS_REGION;" \
     "docker compose up -d --build;" \
@@ -128,7 +147,9 @@ function main() {
         destroy) destroy "$@";;
         connect) connect "$@";;
         certbot) certbot "$@";;
-        deploy) deploy "$@";;
+        docker_login) docker_login "$@";;
+        copy_files) copy_files "$@";;
+        start_services) start_services "$@";;
         *) echo "Unknown command: $1"; exit 1;;
     esac
 }

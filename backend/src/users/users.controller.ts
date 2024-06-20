@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { UsersService } from '@app/users/users.service';
-import { ApiSpecification } from 'nestjs-swagger-api-spec';
-import { UsersSwagger } from '@app/users/users.swagger';
-import { UserResource, UsersCollection } from '@app/users/users.resources';
 import { CreateUserRequest } from '@app/users/users.requests';
+import { UserResource, UsersCollection } from '@app/users/users.resources';
+import { UsersService } from '@app/users/users.service';
+import { UsersSwagger } from '@app/users/users.swagger';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiSpecification } from 'nestjs-swagger-api-spec';
 
 @Controller('users')
 @ApiSpecification(UsersSwagger.Controller)

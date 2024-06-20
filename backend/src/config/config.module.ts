@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule as BaseConfigModule } from '@nestjs/config';
 import { nestConfig } from '@app/config/nest.config';
 import { prismaConfig } from '@app/config/prisma.config';
+import { Module } from '@nestjs/common';
+import { ConfigModule as BaseConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
 @Module({
