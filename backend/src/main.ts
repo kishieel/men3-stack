@@ -4,6 +4,7 @@ import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { NestConfig, NestConfigToken } from '@app/config/nest.config';
+import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
         preflightContinue: false,
         optionsSuccessStatus: 204,
     });
+
+    app.use(helmet());
 
     app.setGlobalPrefix('/api');
     app.useGlobalPipes(
