@@ -21,3 +21,20 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_alarm" {
     ServiceName = each.value
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "high_memory_alarm" {
+  for_each = toset(local.observable_services)
+  alarm_name = "${each.value}-high-memory-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods = 3
+  metric_name = "MemoryUtilization"
+  namespace = "AWS/ECS"
+  period = 60
+  statistic = "Average"
+  threshold = 80
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.default.name
+    ServiceName = each.value
+  }
+}

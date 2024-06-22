@@ -1,0 +1,26 @@
+name: Frontend pull request
+
+on:
+  pull_request:
+    paths:
+      - 'frontend/**'
+    branches:
+      - master
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        working-directory: backend
+        run: yarn install
+      - name: Lint
+        working-directory: backend
+        run: yarn lint

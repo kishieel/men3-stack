@@ -1,0 +1,54 @@
+name: Get deployed images
+description: Retrieve deployed images from last deployment
+
+inputs:
+  aws_region:
+    description: 'AWS region'
+    required: true
+  aws_access_key:
+    description: 'AWS access key'
+    required: true
+  aws_secret_key:
+    description: 'AWS secret key'
+    required: true
+  terraform_backend:
+    description: 'Terraform backend configuration'
+    required: true
+
+outputs:
+  app_backend_deployed_image:
+    description: 'Backend Docker image'
+    value: ${{ steps.deployed_images.outputs.app_backend_deployed_image }}
+  app_frontend_deployed_image:
+    description: 'Frontend Docker image'
+    value: ${{ steps.deployed_images.outputs.app_frontend_deployed_image }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: AWS CLI setup
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ inputs.aws_access_key }}
+        aws-secret-access-key: ${{ inputs.aws_secret_key }}
+        aws-region: ${{ inputs.aws_region }}
+    - name: Terraform setup
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ">=1"
+    - name: Terraform init
+      working-directory: deployment/production
+      shell: bash
+      run: |
+        echo '${{ inputs.terraform_backend }}' > backend.hcl
+        terraform init -backend-config=backend.hcl
+    - name: Get deployed images
+      working-directory: deployment/production
+      id: deployed_images
+      shell: bash
+      run: |
+        terraform output -json > terraform_output.json
+        echo "app_backend_deployed_image=$(jq -r '.app_backend_deployed_image.value' terraform_output.json)" >> $GITHUB_OUTPUT
+        echo "app_frontend_deployed_image=$(jq -r '.app_frontend_deployed_image.value' terraform_output.json)" >> $GITHUB_OUTPUT
