@@ -6,7 +6,7 @@ resource "aws_db_instance" "default" {
   allocated_storage   = 10
   engine              = "mysql"
   engine_version      = "8.0"
-  skip_final_snapshot = true
+  skip_final_snapshot = false
 
   vpc_security_group_ids = [aws_security_group.mysql.id]
   db_subnet_group_name   = aws_db_subnet_group.default[0].name

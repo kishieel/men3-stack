@@ -14,6 +14,6 @@ resource "aws_cloudwatch_log_group" "frontend" {
 }
 
 resource "aws_cloudwatch_log_group" "mysql" {
-  name              = "/ecs/mysql" # @fixme
-  retention_in_days = 1
+  name              = "/ecs/mysql"
+  retention_in_days = 0
 }
