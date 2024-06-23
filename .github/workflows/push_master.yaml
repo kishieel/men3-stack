@@ -1,0 +1,88 @@
+name: Deploy application to staging
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+    branches:
+      - master
+
+jobs:
+  build-frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    outputs:
+      app_frontend_image: ${{ steps.build.outputs.image }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build and push image
+        uses: ./.github/actions/build-action
+        id: build
+        with:
+          registry: ghcr.io
+          image_name: kishieel/men3-stack-frontend
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          context: frontend
+
+  build-backend:
+    name: Build backend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    outputs:
+      app_backend_image: ${{ steps.build.outputs.image }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build and push image
+        uses: ./.github/actions/build-action
+        id: build
+        with:
+          registry: ghcr.io
+          image_name: kishieel/men3-stack-backend
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          context: backend
+
+  deploy:
+    name: Deploy
+    needs:
+      - build-frontend
+      - build-backend
+    runs-on: ubuntu-latest
+    environment: staging
+    if: |
+      always() && vars.STAGING_ENABLED == 'true' &&
+      (needs.build-frontend.result == 'success' || needs.build-backend.result == 'success')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get deployed images
+        uses: ./.github/actions/get-deployed-images-action
+        id: deployed_images
+        with:
+          aws_region: ${{ vars.AWS_REGION }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          terraform_backend: ${{ secrets.TF_BACKEND }}
+      - name: Deploy application
+        uses: ./.github/actions/deploy-action
+        with:
+          aws_region: ${{ vars.AWS_REGION }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          terraform_backend: ${{ secrets.TF_BACKEND }}
+          terraform_vars: |-
+            ${{ secrets.TF_VARS }}
+            ${{ vars.TF_VARS }}
+          app_backend_image: ${{ needs.build-backend.outputs.app_backend_image || steps.deployed_images.outputs.app_backend_deployed_image }}
+          app_frontend_image: ${{ needs.build-frontend.outputs.app_frontend_image || steps.deployed_images.outputs.app_frontend_deployed_image }}

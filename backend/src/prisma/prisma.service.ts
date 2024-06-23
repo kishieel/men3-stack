@@ -1,6 +1,6 @@
+import { PrismaConfig, PrismaConfigKey } from '@app/config/prisma.config';
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { PrismaConfig, PrismaConfigKey } from '@app/config/prisma.config';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -8,7 +8,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
     constructor(
         @Inject(PrismaConfigKey)
-        private readonly prismaConfig: PrismaConfig,
+        readonly prismaConfig: PrismaConfig,
     ) {
         super({
             datasourceUrl: prismaConfig.url,

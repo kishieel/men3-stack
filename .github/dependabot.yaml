@@ -1,0 +1,36 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directories:
+      - "backend"
+      - "frontend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependabot"
+    assignees:
+      - "kishieel"
+    reviewers:
+      - "kishieel"
+
+  - package-ecosystem: docker
+    directories:
+      - "backend"
+      - "frontend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependabot"
+    assignees:
+      - "kishieel"
+    reviewers:
+      - "kishieel"

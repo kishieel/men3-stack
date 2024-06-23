@@ -1,5 +1,5 @@
-import { IsString, IsStrongPassword } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsStrongPassword } from 'class-validator';
 
 export class CreateUserRequest {
     @IsString()

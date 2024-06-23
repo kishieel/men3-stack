@@ -1,7 +1,7 @@
-import { Logger } from '@nestjs/common';
-import { PrismaService } from '@app/prisma/prisma.service';
-import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@app/app.module';
+import { PrismaService } from '@app/prisma/prisma.service';
+import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 
 async function bootstrap() {
     const logger = new Logger('SeedCommand');

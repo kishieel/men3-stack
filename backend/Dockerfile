@@ -44,7 +44,7 @@ COPY --chown=node:node yarn.lock yarn.lock
 RUN yarn --production --frozen-lockfile
 
 
-FROM system as production
+FROM system AS production
 
 ENV NODE_ENV="production"
 

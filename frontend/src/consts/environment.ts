@@ -1,5 +1,3 @@
-import assert from 'assert';
-
 const getenv = <T extends boolean>(name: string, required?: T): T extends true ? string : string | undefined => {
     const value = process.env[name];
 

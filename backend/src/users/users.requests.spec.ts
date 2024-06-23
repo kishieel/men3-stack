@@ -1,6 +1,6 @@
-import { validateOrReject } from 'class-validator';
 import { CreateUserRequest } from '@app/users/users.requests';
 import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 
 describe(CreateUserRequest.name, () => {
     it('should pass validation', async () => {
