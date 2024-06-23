@@ -6,7 +6,7 @@ on:
       environment:
         description: 'Environment to terminate'
         required: true
-        type: string
+        type: choice
         options:
           - 'staging'
           - 'production'
@@ -37,4 +37,7 @@ jobs:
           echo '${{ secrets.TF_BACKEND }}' > backend.hcl
           terraform init -backend-config=backend.hcl
       - name: Terraform destroy
-        run: terraform destroy -auto-approve
+        run: |
+          echo '${{ secrets.TF_VARS }}' >> 10_defaults.auto.tfvars
+          echo '${{ vars.TF_VARS }}' >> 10_defaults.auto.tfvars
+          terraform destroy -auto-approve
