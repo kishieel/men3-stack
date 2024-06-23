@@ -1,0 +1,40 @@
+name: Terminate environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to terminate'
+        required: true
+        type: string
+        options:
+          - 'staging'
+          - 'production'
+
+jobs:
+  terminate:
+    name: Terminate environment
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    defaults:
+      run:
+        working-directory: deployment/production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: AWS CLI setup
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ">=1"
+      - name: Terraform init
+        run: |
+          echo '${{ secrets.TF_BACKEND }}' > backend.hcl
+          terraform init -backend-config=backend.hcl
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve

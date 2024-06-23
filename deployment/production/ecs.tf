@@ -14,7 +14,7 @@ data "template_file" "backend" {
     app_backend_image               = var.app_backend_image
     app_backend_log_group           = var.app_backend_log_group
     app_backend_migration_log_group = "${var.app_backend_log_group}-migrate"
-    app_database_url                = local.app_database_url
+    app_database_url                = local.app_database_url # @fixme: value of this variable can be seen in the dashboard, it should be a secret
     ghcr_credentials_arn            = aws_secretsmanager_secret.ghcr_credentials.arn
   }
 }
