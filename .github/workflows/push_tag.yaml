@@ -68,6 +68,9 @@ jobs:
     if: |
       always() && vars.PRODUCTION_ENABLED == 'true' &&
       (needs.build-frontend.result == 'success' || needs.build-backend.result == 'success')
+    concurrency:
+      group: deploy-to-production
+      cancel-in-progress: false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

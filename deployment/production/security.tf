@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb" {
-  name        = "alb-load-balancer-security-group"
+  name        = "ALBSecurityGroup"
   description = "Allow inbound traffic to the ALB"
   vpc_id      = aws_vpc.default.id
 
@@ -33,14 +33,14 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_security_group" "backend" {
-  name        = "backend-security-group"
+  name        = "BackendSecurityGroup"
   description = "Allow inbound traffic to the ECS tasks"
   vpc_id      = aws_vpc.default.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
 
@@ -53,14 +53,14 @@ resource "aws_security_group" "backend" {
 }
 
 resource "aws_security_group" "frontend" {
-  name        = "frontend-security-group"
+  name        = "FrontendSecurityGroup"
   description = "Allow inbound traffic to the ECS tasks"
   vpc_id      = aws_vpc.default.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
 
@@ -73,7 +73,7 @@ resource "aws_security_group" "frontend" {
 }
 
 resource "aws_security_group" "mysql" {
-  name        = "mysql-security-group"
+  name        = "MySQLSecurityGroup"
   description = "Allow inbound traffic to the MySQL"
   vpc_id      = aws_vpc.default.id
 
@@ -88,6 +88,23 @@ resource "aws_security_group" "mysql" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = aws_subnet.private.*.cidr_block
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "vpc_endpoints" {
+  name        = "VPCEndpointsSecurityGroup"
+  description = "Associated to ECR/s3 VPC Endpoints"
+  vpc_id      = aws_vpc.default.id
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [
+      aws_security_group.backend.id,
+      aws_security_group.frontend.id,
+      aws_security_group.mysql.id
+    ]
   }
 }

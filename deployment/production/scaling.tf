@@ -16,7 +16,7 @@ resource "aws_appautoscaling_target" "default" {
 
 resource "aws_appautoscaling_policy" "memory" {
   for_each           = toset(local.scalable_services)
-  name               = "${each.value}-memory"
+  name               = "${each.value}Memory"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.default[each.key].resource_id
   scalable_dimension = aws_appautoscaling_target.default[each.key].scalable_dimension
@@ -33,7 +33,7 @@ resource "aws_appautoscaling_policy" "memory" {
 
 resource "aws_appautoscaling_policy" "cpu" {
   for_each           = toset(local.scalable_services)
-  name               = "${each.value}-cpu"
+  name               = "${each.value}CPU"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.default[each.key].resource_id
   scalable_dimension = aws_appautoscaling_target.default[each.key].scalable_dimension

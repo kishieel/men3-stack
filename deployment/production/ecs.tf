@@ -14,8 +14,8 @@ data "template_file" "backend" {
     app_backend_image               = var.app_backend_image
     app_backend_log_group           = var.app_backend_log_group
     app_backend_migration_log_group = "${var.app_backend_log_group}-migrate"
-    app_database_url                = local.app_database_url # @fixme: value of this variable can be seen in the dashboard, it should be a secret
-    ghcr_credentials_arn            = aws_secretsmanager_secret.ghcr_credentials.arn
+    # @fixme: value of this variable can be seen in the dashboard, it should be a secret
+    app_database_url                = local.app_database_url
   }
 }
 
@@ -24,17 +24,18 @@ resource "aws_ecs_task_definition" "backend" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.fargate_cpu
-  memory                   = var.fargate_memory
+  cpu                      = var.app_backend_cpu
+  memory                   = var.app_backend_memory
   container_definitions    = data.template_file.backend.rendered
 }
 
 resource "aws_ecs_service" "backend" {
-  name            = "Backend"
-  cluster         = aws_ecs_cluster.default.arn
-  task_definition = aws_ecs_task_definition.backend.arn
-  desired_count   = var.app_backend_count
-  launch_type     = "FARGATE"
+  name                  = "Backend"
+  cluster               = aws_ecs_cluster.default.arn
+  task_definition       = aws_ecs_task_definition.backend.arn
+  desired_count         = var.app_backend_count
+  launch_type           = "FARGATE"
+  wait_for_steady_state = !var.first_run
 
   network_configuration {
     subnets          = aws_subnet.private.*.id
@@ -76,7 +77,6 @@ data "template_file" "frontend" {
     aws_region             = var.aws_region
     app_frontend_image     = var.app_frontend_image
     app_frontend_log_group = var.app_frontend_log_group
-    ghcr_credentials_arn   = aws_secretsmanager_secret.ghcr_credentials.arn
   }
 }
 
@@ -85,17 +85,18 @@ resource "aws_ecs_task_definition" "frontend" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.fargate_cpu
-  memory                   = var.fargate_memory
+  cpu                      = var.app_frontend_cpu
+  memory                   = var.app_frontend_memory
   container_definitions    = data.template_file.frontend.rendered
 }
 
 resource "aws_ecs_service" "frontend" {
-  name            = "Frontend"
-  cluster         = aws_ecs_cluster.default.arn
-  task_definition = aws_ecs_task_definition.frontend.arn
-  desired_count   = var.app_frontend_count
-  launch_type     = "FARGATE"
+  name                  = "Frontend"
+  cluster               = aws_ecs_cluster.default.arn
+  task_definition       = aws_ecs_task_definition.frontend.arn
+  desired_count         = var.app_frontend_count
+  launch_type           = "FARGATE"
+  wait_for_steady_state = !var.first_run
 
   network_configuration {
     subnets          = aws_subnet.private.*.id
@@ -121,10 +122,11 @@ data "template_file" "mysql" {
 
   vars = {
     aws_region          = var.aws_region
-    mysql_root_password = var.mysql_root_password
+    mysql_image         = var.mysql_image
     mysql_database      = var.mysql_database
     mysql_username      = var.mysql_username
     mysql_password      = var.mysql_password
+    mysql_root_password = var.mysql_root_password
   }
 }
 
@@ -134,18 +136,19 @@ resource "aws_ecs_task_definition" "mysql" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.fargate_cpu
-  memory                   = var.fargate_memory
+  cpu                      = var.mysql_cpu
+  memory                   = var.mysql_memory
   container_definitions    = data.template_file.mysql[0].rendered
 }
 
 resource "aws_ecs_service" "mysql" {
-  count           = var.app_environment == "production" ? 0 : 1
-  name            = "MySQL"
-  cluster         = aws_ecs_cluster.default.arn
-  task_definition = aws_ecs_task_definition.mysql[0].arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  count                 = var.app_environment == "production" ? 0 : 1
+  name                  = "MySQL"
+  cluster               = aws_ecs_cluster.default.arn
+  task_definition       = aws_ecs_task_definition.mysql[0].arn
+  desired_count         = 1
+  launch_type           = "FARGATE"
+  wait_for_steady_state = !var.first_run
 
   network_configuration {
     subnets          = aws_subnet.private.*.id

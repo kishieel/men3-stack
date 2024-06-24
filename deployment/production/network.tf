@@ -34,30 +34,52 @@ resource "aws_route" "internet_access" {
   destination_cidr_block = "0.0.0.0/0"
 }
 
-resource "aws_eip" "elastic_ip" {
+resource "aws_eip" "nat_gateway" {
   count      = local.availability_zone_count
   domain     = "vpc"
   depends_on = [aws_internet_gateway.gateway]
 }
 
 resource "aws_nat_gateway" "nat_gateway" {
-  count         = local.availability_zone_count
-  subnet_id     = element(aws_subnet.public.*.id, count.index)
-  allocation_id = element(aws_eip.elastic_ip.*.id, count.index)
+  count = local.availability_zone_count
+  subnet_id = aws_subnet.public[count.index].id
+  allocation_id = aws_eip.nat_gateway[count.index].id
 }
 
 resource "aws_route_table" "private" {
-  count  = local.availability_zone_count
+  count = local.availability_zone_count
   vpc_id = aws_vpc.default.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = element(aws_nat_gateway.nat_gateway.*.id, count.index)
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gateway[count.index].id
   }
 }
 
-resource "aws_route_table_association" "private" {
-  count          = local.availability_zone_count
-  subnet_id      = element(aws_subnet.private.*.id, count.index)
-  route_table_id = element(aws_route_table.private.*.id, count.index)
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id              = aws_vpc.default.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+  subnet_ids         = aws_subnet.private[*].id
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id              = aws_vpc.default.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+  subnet_ids         = aws_subnet.private[*].id
+}
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.default.id
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [aws_vpc.default.main_route_table_id]
 }

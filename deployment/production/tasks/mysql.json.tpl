@@ -1,9 +1,7 @@
 [
   {
     "name": "mysql",
-    "image": "mysql:8",
-    "cpu": 512,
-    "memory": 1024,
+    "image": "${mysql_image}",
     "networkMode": "awsvpc",
     "logConfiguration": {
       "logDriver": "awslogs",
