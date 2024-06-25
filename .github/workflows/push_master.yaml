@@ -7,18 +7,20 @@ on:
       - 'backend/**'
     branches:
       - master
+  pull_request:
 
 jobs:
   build-frontend:
     name: Build frontend
     runs-on: ubuntu-latest
+    environment: staging
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
     outputs:
-      app_frontend_image: ${{ steps.build.outputs.image }}
+      app_frontend_image: ${{ steps.build.outputs.aws_ecr_image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,21 +28,30 @@ jobs:
         uses: ./.github/actions/build-action
         id: build
         with:
-          registry: ghcr.io
-          image_name: kishieel/men3-stack-frontend
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ghcr_registry: ghcr.io
+          ghcr_repository: kishieel
+          ghcr_username: ${{ github.actor }}
+          ghcr_password: ${{ secrets.GITHUB_TOKEN }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          aws_region: ${{ vars.AWS_REGION }}
+          aws_ecr_registry: ${{ vars.AWS_ECR_REGISTRY }}
+          aws_ecr_repository: ${{ vars.AWS_ECR_REPOSITORY }}
+          aws_ecr_enabled: ${{ vars.STAGING_ENABLED == 'true' }}
+          image_name: men3-stack-frontend
           context: frontend
 
   build-backend:
     name: Build backend
     runs-on: ubuntu-latest
+    environment: staging
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
     outputs:
-      app_backend_image: ${{ steps.build.outputs.image }}
+      app_backend_image: ${{ steps.build.outputs.aws_ecr_image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,9 +59,17 @@ jobs:
         uses: ./.github/actions/build-action
         id: build
         with:
-          registry: ghcr.io
-          image_name: kishieel/men3-stack-backend
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ghcr_registry: ghcr.io
+          ghcr_repository: kishieel
+          ghcr_username: ${{ github.actor }}
+          ghcr_password: ${{ secrets.GITHUB_TOKEN }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          aws_region: ${{ vars.AWS_REGION }}
+          aws_ecr_registry: ${{ vars.AWS_ECR_REGISTRY }}
+          aws_ecr_repository: ${{ vars.AWS_ECR_REPOSITORY }}
+          aws_ecr_enabled: ${{ vars.STAGING_ENABLED == 'true' }}
+          image_name: men3-stack-backend
           context: backend
 
   deploy:
@@ -63,6 +82,9 @@ jobs:
     if: |
       always() && vars.STAGING_ENABLED == 'true' &&
       (needs.build-frontend.result == 'success' || needs.build-backend.result == 'success')
+    concurrency:
+      group: deploy-to-staging
+      cancel-in-progress: false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

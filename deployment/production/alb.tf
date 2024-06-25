@@ -9,7 +9,7 @@ resource "aws_alb" "default" {
 }
 
 resource "aws_alb_target_group" "backend" {
-  name        = "backend"
+  name        = "BackendTargetGroup"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.default.id
@@ -27,7 +27,7 @@ resource "aws_alb_target_group" "backend" {
 }
 
 resource "aws_alb_target_group" "frontend" {
-  name        = "frontend"
+  name        = "FrontendTargetGroup"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.default.id

@@ -2,24 +2,51 @@ name: Build and push image
 description: Build and push Docker image to GitHub Container Registry
 
 inputs:
-  registry:
-    description: 'Container registry'
-    required: true
+  ghcr_registry:
+    description: 'GitHub Container Registry URL'
     default: 'ghcr.io'
+    required: true
+  ghcr_repository:
+    description: 'GitHub Container Registry repository'
+    required: true
+  ghcr_username:
+    description: 'GitHub Container Registry username'
+    required: true
+  ghcr_password:
+    description: 'GitHub Container Registry password'
+    required: true
+  aws_access_key:
+    description: 'AWS access key'
+    required: true
+  aws_secret_key:
+    description: 'AWS secret key'
+    required: true
+  aws_region:
+    description: 'AWS region'
+    required: true
+  aws_ecr_registry:
+    description: 'AWS Elastic Container Registry URL'
+    required: true
+  aws_ecr_repository:
+    description: 'AWS Elastic Container Registry repository'
+    required: true
+  aws_ecr_enabled:
+    description: 'Push image to AWS Elastic Container Registry'
+    required: true
   image_name:
     description: 'Docker image name'
-    required: true
-  github_token:
-    description: 'GitHub token'
     required: true
   context:
     description: 'Build context (backend or frontend)'
     required: true
 
 outputs:
-  image:
-    description: 'Docker image name with version'
-    value: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ steps.meta.outputs.version }}
+  ghcr_image:
+    description: 'GitHub Container Registry image name'
+    value: ${{ inputs.ghcr_registry }}/${{ inputs.ghcr_repository }}/${{ inputs.image_name }}:${{ steps.meta.outputs.version }}
+  aws_ecr_image:
+    description: 'AWS Elastic Container Registry image name'
+    value: ${{ inputs.aws_ecr_registry }}/${{ inputs.aws_ecr_repository }}/${{ inputs.image_name }}:${{ steps.meta.outputs.version }}
 
 runs:
   using: composite
@@ -30,23 +57,33 @@ runs:
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+    - name: AWS CLI setup
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ inputs.aws_access_key }}
+        aws-secret-access-key: ${{ inputs.aws_secret_key }}
+        aws-region: ${{ inputs.aws_region }}
+    - name: Login to AWS Elastic Container Registry
+      uses: aws-actions/amazon-ecr-login@v1.6.0
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v3
       with:
-        registry: ${{ inputs.registry }}
-        username: ${{ github.actor }}
-        password: ${{ inputs.github_token }}
+        registry: ${{ inputs.ghcr_registry }}
+        username: ${{ inputs.ghcr_username }}
+        password: ${{ inputs.ghcr_password }}
     - name: Extract metadata
       id: meta
       uses: docker/metadata-action@v5
       env:
         DOCKER_METADATA_PR_HEAD_SHA: true
       with:
-        images: ${{ inputs.registry }}/${{ inputs.image_name }}
+        images: |
+          ${{ inputs.aws_ecr_registry }}/${{ inputs.aws_ecr_repository }}/${{ inputs.image_name }}
+          ${{ inputs.ghcr_registry }}/${{ inputs.ghcr_repository }}/${{ inputs.image_name }}
         tags: |
           type=match,pattern=${{ inputs.context }}\/(v[0-9]+.[0-9]+.[0-9]+),group=1
           type=sha
-    - name: Build and push image
+    - name: Build images
       id: push
       uses: docker/build-push-action@v6
       with:
@@ -55,7 +92,15 @@ runs:
         file: ${{ inputs.context }}/Dockerfile
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        push: true
-        provenance: true
+        load: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
+    - name: Push images to GitHub Container Registry
+      shell: bash
+      run: |
+        docker push ${{ inputs.ghcr_registry }}/${{ inputs.ghcr_repository }}/${{ inputs.image_name }}:${{ steps.meta.outputs.version }}
+    - name: Push images to AWS Elastic Container Registry
+      if: ${{ inputs.aws_ecr_enabled }}
+      shell: bash
+      run:
+        docker push ${{ inputs.aws_ecr_registry }}/${{ inputs.aws_ecr_repository }}/${{ inputs.image_name }}:${{ steps.meta.outputs.version }}

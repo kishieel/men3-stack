@@ -2,8 +2,6 @@
     {
         "name": "frontend",
         "image": "${app_frontend_image}",
-        "cpu": 256,
-        "memory": 256,
         "networkMode": "awsvpc",
         "logConfiguration": {
             "logDriver": "awslogs",
@@ -34,9 +32,6 @@
             "interval": 30,
             "timeout": 10,
             "retries": 3
-        },
-        "repositoryCredentials": {
-            "credentialsParameter": "${ghcr_credentials_arn}"
         }
     }
 ]

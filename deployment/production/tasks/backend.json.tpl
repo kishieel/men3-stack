@@ -2,8 +2,6 @@
     {
         "name": "backend",
         "image": "${app_backend_image}",
-        "cpu": 512,
-        "memory": 512,
         "networkMode": "awsvpc",
         "logConfiguration": {
             "logDriver": "awslogs",
@@ -40,17 +38,12 @@
                 "containerName": "backend-migrate",
                 "condition": "SUCCESS"
             }
-        ],
-        "repositoryCredentials": {
-            "credentialsParameter": "${ghcr_credentials_arn}"
-        }
+        ]
     },
     {
         "name": "backend-migrate",
         "image": "${app_backend_image}",
         "essential": false,
-        "cpu": 256,
-        "memory": 256,
         "networkMode": "awsvpc",
         "logConfiguration": {
             "logDriver": "awslogs",
@@ -69,9 +62,6 @@
         "command": [
             "yarn",
             "prisma:deploy"
-        ],
-        "repositoryCredentials": {
-            "credentialsParameter": "${ghcr_credentials_arn}"
-        }
+        ]
     }
 ]

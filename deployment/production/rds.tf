@@ -25,6 +25,5 @@ resource "aws_db_instance" "default" {
 
 resource "aws_db_subnet_group" "default" {
   count      = var.app_environment == "production" ? 1 : 0
-  name       = "mysql-subnet-group"
   subnet_ids = aws_subnet.private.*.id
 }
