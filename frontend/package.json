@@ -14,7 +14,7 @@
   "dependencies": {
     "@tanstack/react-query": "5.55.4",
     "date-fns": "3.6.0",
-    "next": "14.2.8",
+    "next": "14.2.9",
     "next-themes": "0.3.0",
     "react": "^18",
     "react-dom": "^18"
