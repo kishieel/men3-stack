@@ -1,4 +1,4 @@
-FROM node:22-alpine3.19 AS system
+FROM node:23-alpine3.19 AS system
 
 ARG UID=1000
 ARG GID=1000
