@@ -17,6 +17,11 @@ updates:
       - "kishieel"
     reviewers:
       - "kishieel"
+    groups:
+      deps-dev:
+        dependency-type: "development"
+      deps:
+        dependency-type: "production"
 
   - package-ecosystem: docker
     directories:
@@ -34,3 +39,8 @@ updates:
       - "kishieel"
     reviewers:
       - "kishieel"
+    groups:
+      docker:
+        patterns:
+          - "*"
+
