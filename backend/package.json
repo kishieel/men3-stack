@@ -27,11 +27,11 @@
     "cmd:seed": "node dist/cmd/seed.command"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.11",
+    "@nestjs/common": "^11.1.12",
     "@nestjs/config": "4.0.2",
-    "@nestjs/core": "^11.1.11",
-    "@nestjs/platform-express": "^11.1.11",
-    "@nestjs/swagger": "11.2.4",
+    "@nestjs/core": "^11.1.12",
+    "@nestjs/platform-express": "^11.1.12",
+    "@nestjs/swagger": "11.2.5",
     "@nestjs/terminus": "11.0.0",
     "@prisma/client": "7.2.0",
     "class-transformer": "0.5.1",
