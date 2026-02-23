@@ -1392,10 +1392,10 @@
     webpack "5.104.1"
     webpack-node-externals "3.0.0"
 
-"@nestjs/common@^11.1.13":
-  version "11.1.13"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.1.13.tgz#3d4bcc2a593236546bc62f7801b0d4450b26a9ac"
-  integrity sha512-ieqWtipT+VlyDWLz5Rvz0f3E5rXcVAnaAi+D53DEHLjc1kmFxCgZ62qVfTX2vwkywwqNkTNXvBgGR72hYqV//Q==
+"@nestjs/common@^11.1.14":
+  version "11.1.14"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.1.14.tgz#f89e8d9ad32a3804958eda1c4846d2e2f107ce28"
+  integrity sha512-IN/tlqd7Nl9gl6f0jsWEuOrQDaCI9vHzxv0fisHysfBQzfQIkqlv5A7w4Qge02BUQyczXT9HHPgHtWHCxhjRng==
   dependencies:
     uid "2.0.2"
     file-type "21.3.0"
@@ -1412,10 +1412,10 @@
     dotenv-expand "12.0.3"
     lodash "4.17.23"
 
-"@nestjs/core@^11.1.13":
-  version "11.1.13"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.1.13.tgz#4444e124d255759d545a631f63e9d84fe1a1e3e5"
-  integrity sha512-Tq9EIKiC30EBL8hLK93tNqaToy0hzbuVGYt29V8NhkVJUsDzlmiVf6c3hSPtzx2krIUVbTgQ2KFeaxr72rEyzQ==
+"@nestjs/core@^11.1.14":
+  version "11.1.14"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.1.14.tgz#37cb2deb18082f7e78585182f2fca6158748ef8b"
+  integrity sha512-7OXPPMoDr6z+5NkoQKu4hOhfjz/YYqM3bNilPqv1WVFWrzSmuNXxvhbX69YMmNmRYascPXiwESqf5jJdjKXEww==
   dependencies:
     uid "2.0.2"
     "@nuxt/opencollective" "0.4.1"
@@ -1429,10 +1429,10 @@
   resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-2.1.0.tgz#b9b536b7c3571567aa1d0223db8baa1a51505a19"
   integrity sha512-W+n+rM69XsFdwORF11UqJahn4J3xi4g/ZEOlJNL6KoW5ygWSmBB2p0S2BZ4FQeS/NDH72e6xIcu35SfJnE8bXw==
 
-"@nestjs/platform-express@^11.1.13":
-  version "11.1.13"
-  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-11.1.13.tgz#272e350cb3938ec0f383aa083c7f1d5d44fae2dc"
-  integrity sha512-LYmi43BrAs1n74kLCUfXcHag7s1CmGETcFbf9IVyA/KWXAuAH95G3wEaZZiyabOLFNwq4ifnRGnIwUwW7cz3+w==
+"@nestjs/platform-express@^11.1.14":
+  version "11.1.14"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-11.1.14.tgz#909d88f81ad2114c0f61fe5731bbaa65de8075a6"
+  integrity sha512-Fs+/j+mBSBSXErOQJ/YdUn/HqJGSJ4pGfiJyYOyz04l42uNVnqEakvu1kXLbxMabR6vd6/h9d6Bi4tso9p7o4Q==
   dependencies:
     cors "2.8.6"
     express "5.2.1"
@@ -1463,10 +1463,10 @@
     path-to-regexp "8.3.0"
     swagger-ui-dist "5.31.0"
 
-"@nestjs/terminus@11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-11.0.0.tgz#18b030e4994ef3a8c63136df4c6fb4b6fbe70f59"
-  integrity sha512-c55LOo9YGovmQHtFUMa/vDaxGZ2cglMTZejqgHREaApt/GArTfgYYGwhRXPLq8ZwiQQlLuYB+79e9iA8mlDSLA==
+"@nestjs/terminus@11.1.1":
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/terminus/-/terminus-11.1.1.tgz#22da9e59597917630419331360e8cc662b071e35"
+  integrity sha512-Ssql79H+EQY/Wg108eJqN4NiNsO/tLrj+qbzOWSQUf2JE4vJQ2RG3WTqUOrYjfjWmVHD3+Ys0+azed7LSMKScw==
   dependencies:
     boxen "5.1.2"
     check-disk-space "3.4.0"
@@ -1533,17 +1533,17 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@prisma/client-runtime-utils@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client-runtime-utils/-/client-runtime-utils-7.4.0.tgz#feeb5a09f247ce1f0f8ef4cc817e9ccd6c8f46c3"
-  integrity sha512-jTmWAOBGBSCT8n7SMbpjCpHjELgcDW9GNP/CeK6CeqjUFlEL6dn8Cl81t/NBDjJdXDm85XDJmc+PEQqqQee3xw==
+"@prisma/client-runtime-utils@7.4.1":
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client-runtime-utils/-/client-runtime-utils-7.4.1.tgz#68f95c9a4ca0bdf6e5ae733569f685c99bf99570"
+  integrity sha512-8fy74OMYC7mt9cJ2MncIDk1awPRgmtXVvwTN2FlW4JVhbck8Dgt0wTkhPG85myfj4ZeP2stjF9Sdg12n5HrpQg==
 
-"@prisma/client@7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-7.4.0.tgz#c3f19a15d4a678807035987b251293474639f1cc"
-  integrity sha512-Sc+ncr7+ph1hMf1LQfn6UyEXDEamCd5pXMsx8Q3SBH0NGX+zjqs3eaABt9hXwbcK9l7f8UyK8ldxOWA2LyPynQ==
+"@prisma/client@7.4.1":
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-7.4.1.tgz#5c14febe23baf9e765cde246c834c88237ae0025"
+  integrity sha512-pgIll2W1NVdof37xLeyySW+yfQ4rI+ERGCRwnO3BjVOx42GpYq6jhTyuALK8VKirvJJIvImgfGDA2qwhYVvMuA==
   dependencies:
-    "@prisma/client-runtime-utils" "7.4.0"
+    "@prisma/client-runtime-utils" "7.4.1"
 
 "@prisma/config@7.4.1":
   version "7.4.1"
