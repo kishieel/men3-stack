@@ -31,7 +31,7 @@
     "postcss": "^8",
     "prettier": "3.8.1",
     "tailwindcss": "^4.2.2",
-    "typescript": "^5"
+    "typescript": "^6"
   },
   "resolutions": {
     "cliui/wrap-ansi": "^7.0.0"
