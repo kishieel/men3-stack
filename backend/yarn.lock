@@ -1413,10 +1413,10 @@
     jsonc-parser "3.3.1"
     pluralize "8.0.0"
 
-"@nestjs/swagger@11.3.2":
-  version "11.3.2"
-  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-11.3.2.tgz#73b4e56a7da86d7b18653f9ede52e9f1e7a4ba9f"
-  integrity sha512-3q+j3i8rmuKGetxv9fIN3fFsYrwodHRqggQVMUDSktYHDNHQRk9sF2GB10GGOJTuo1ofKxbn9UsD7BRfQ+oZyA==
+"@nestjs/swagger@11.4.2":
+  version "11.4.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-11.4.2.tgz#2733ad50c74f1c23f494bb51ad8d838a2e7c638d"
+  integrity sha512-aBihEogDMj/bLEcaqhkvyX/ZVWUw/bmnhKzR0zwUoyGJikvZyaq7rOPYl/H7Lxkkr3c90SJxyuv1AX2UT1WKlw==
   dependencies:
     "@microsoft/tsdoc" "0.16.0"
     "@nestjs/mapped-types" "2.1.1"
@@ -1495,17 +1495,17 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@prisma/client-runtime-utils@7.7.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client-runtime-utils/-/client-runtime-utils-7.7.0.tgz#7d45c5754358e9d4d006a137818ebdb5f0c4dcb6"
-  integrity sha512-BLyd0UpFYOtyJFTHm7jS9vesHW7P83abibodQMiIofqjBKzDHQ1VAsQkdfvXyYDkPlONPfOTz7/rv3x/+CQqvQ==
+"@prisma/client-runtime-utils@7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client-runtime-utils/-/client-runtime-utils-7.8.0.tgz#202c0a2ac295e19677debd4a2d18dc35f9ccfb21"
+  integrity sha512-5NQZztQ0oY/ADFkmd9gPuweH5A1/CCY8YQPorLLO0Mu6a87mY5gsnDkzmFmIHs9NFaLnZojzgddFVN4RpKYrdw==
 
-"@prisma/client@7.7.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-7.7.0.tgz#68110e87288c4fdb5b3b928d4cff589b0ac6c33b"
-  integrity sha512-5Ar4OsZpJ54s21sy5oDNNW9gQtd4NuxCaiM7+JDTOU07D6VvlpLjYzAVCMB1+JzokN+08dAVomlx+b7bhJd3ww==
+"@prisma/client@7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-7.8.0.tgz#dce2fb00238c733f6bedeb769547b01f69b86d42"
+  integrity sha512-HFp3Dawv/3sU3JtlPha90IB+48lS7zHiH4LKZPjmcE8YH5P9DOXGPvo8dqOtO7MqLDd1p2hOWMcFlRT1DMblHw==
   dependencies:
-    "@prisma/client-runtime-utils" "7.7.0"
+    "@prisma/client-runtime-utils" "7.8.0"
 
 "@prisma/config@7.7.0":
   version "7.7.0"
