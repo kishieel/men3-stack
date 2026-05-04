@@ -5098,10 +5098,10 @@ jiti@^2.6.1:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.6.1.tgz#178ef2fc9a1a594248c20627cd820187a4d78d92"
   integrity sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==
 
-joi@18.1.2:
-  version "18.1.2"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-18.1.2.tgz#4735a384d7721fcda7a551d128862cf816541924"
-  integrity sha512-rF5MAmps5esSlhCA+N1b6IYHDw9j/btzGaqfgie522jS02Ju/HXBxamlXVlKEHAxoMKQL77HWI8jlqWsFuekZA==
+joi@18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.0.tgz#febee56f325489b8e37ef1ea8c0fcf01beec22f3"
+  integrity sha512-x+uTcQCwzxKVEMAc+V+dS+gcFaZjp74NuCZUMyoU4uO4LFfu141leKv18F6vtUmaE7uGSwMqB34/+x0wclNOhg==
   dependencies:
     "@hapi/address" "^5.1.1"
     "@hapi/formula" "^3.0.2"
